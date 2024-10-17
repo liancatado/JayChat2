@@ -4,10 +4,6 @@ const commandInfoMap = {
     description: "AI Based on GPT-4",
     guide: "-ai what is life?",
   },
-  knight: {
-    name: "knight",
-    description: "see cmd",
-  },
 };
 
 const config = {
@@ -47,6 +43,8 @@ async function onCall({ message, args }) {
 ➜ 𝗴𝗲𝗻𝗱𝗲𝗿
 
 ➜ 𝗿𝗶𝗱𝗱𝗹𝗲
+
+➜ 𝗴𝗽𝘁4
 
 ➜ 𝗳𝗮𝗰𝘁
 
