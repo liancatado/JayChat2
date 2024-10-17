@@ -22,7 +22,7 @@ module.exports = {
         return sendMessage(senderId, { text: `☹ Sorry, I couldn't fetch the gender information for "${name}".` }, pageAccessToken);
       }
 
-      const message = `🧑‍🤝‍🧑 The gender associated with the name "${name}" is: ${gender}.`;
+      const message = `🧑‍🤝‍🧑 The gender associated with the name\n\n "${name}" is: ${gender}.`;
 
       // Send the gender information
       sendMessage(senderId, { text: message }, pageAccessToken);
