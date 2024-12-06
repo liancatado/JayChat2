@@ -45,7 +45,7 @@ module.exports = {
         hour12: true
       });
 
-      const message = `n${result}`;
+      const message = `${result}`;
 
       await sendConcatenatedMessage(senderId, message, pageAccessToken);
 
