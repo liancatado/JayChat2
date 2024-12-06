@@ -1,68 +1,60 @@
 const fs = require('fs');
 const path = require('path');
-
-const commandInfoMap = {
-  ai: {
-    name: "ai",
-    description: "AI Based on GPT-4",
-    guide: "-ai what is life?",
-  },
-  // Add other command info as needed
-};
+const { sendMessage } = require('../handles/sendMessage');
 
 module.exports = {
-  name: "help",
-  description: "View all commands or command details",
-  author: "LiANE",
-  execute(senderId, args, pageAccessToken, sendMessage) {
-    if (args[0]) {
-      const command = args[0].toLowerCase();
-      if (commandInfoMap[command]) {
-        const { name, description, guide } = commandInfoMap[command];
-        const response = `━━━━━━━━━━━━━━━━\n𝙲𝚘𝚖𝚖𝚊𝚗𝚍 𝙽𝚊𝚖𝚎: ${name}\n𝙳𝚎𝚜𝚌𝚛𝚒𝚙𝚝𝚒𝚘𝚗: ${description}\n𝙶𝚞𝚒𝚍𝚎: ${guide || 'No guide available'}\n━━━━━━━━━━━━━━━━`;
-        return sendMessage(senderId, { text: response }, pageAccessToken);
-      } else {
-        return sendMessage(senderId, { text: "Command not found." }, pageAccessToken);
-      }
-    } else {
-      const commandsList = `
-• 𝗠𝗜𝗚𝗢 𝗔𝗜 𝗦𝗜𝗠𝗣𝗟𝗘 𝗖𝗠𝗗 •
-━━━━━━━━━━━━━━━━━━
-➜ 𝗮𝗶
+  name: 'help',
+  description: 'Show available commands',
+  author: 'developer',
+  execute(senderId, args, pageAccessToken) {
+    const commandsDir = path.join(__dirname, '../commands');
+    const commandFiles = fs.readdirSync(commandsDir).filter(file => file.endsWith('.js'));
 
-➜ 𝗺𝗲𝗿𝗿𝗶𝗮𝗺
+    const commands = commandFiles.map((file, index) => {
+      const command = require(path.join(commandsDir, file));
+      return {
+        title: command.name,
+        description: command.description,
+        payload: `${command.name.toUpperCase()}_PAYLOAD`
+      };
+    });
 
-➜ 𝘄𝗶𝗸𝗶𝗽𝗲𝗱𝗶𝗮
+    const totalCommands = commandFiles.length;
+    const commandsPerPage = 25;
+    const totalPages = Math.ceil(totalCommands / commandsPerPage);
+    let page = parseInt(args[0], 20);
 
-➜ 𝗵𝗶𝘀𝘁𝗼𝗿𝘆 
-
-➜ 𝗮𝗱𝘃𝗶𝗰𝗲
-
-➜ 𝗴𝗲𝗻𝗱𝗲𝗿
-
-➜ 𝗿𝗶𝗱𝗱𝗹𝗲
-
-➜ 𝗳𝗮𝗰𝘁
-
-➜ 𝗶𝗺𝗮𝗴𝗶𝗻𝗲
-
-➜ 𝘁𝗿𝗶𝘃𝗶𝗮
-
-➜ 𝗯𝗶𝗯𝗹𝗲
-
-➜ 𝗹𝘆𝗿𝗶𝗰𝘀
-
-➜ 𝘁𝗲𝗺𝗽𝗺𝗮𝗶𝗹
-
-➜ 𝘀𝗺𝘀𝗯𝗼𝗺𝗯
-
-➜ 𝗻𝗴𝗹𝘀𝗽𝗮𝗺
-
-━━━━━━━━━━━━━━━━━━
-𝘁𝘆𝗽𝗲 𝗵𝗲𝗹𝗽 𝘁𝗼 𝘀𝗲𝗲 𝗴𝘂𝗶𝗱𝗲 𝗼𝗻 𝗰𝗺𝗱
-━━━━━━━━━━━━━━━━━━`;
-
-      return sendMessage(senderId, { text: commandsList }, pageAccessToken);
+    if (isNaN(page) || page < 1) {
+      page = 1;
     }
+
+    if (args[0] && args[0].toLowerCase() === 'all') {
+      const helpTextMessage = `𝗖𝗼𝗺𝗺𝗮𝗻𝗱𝘀 𝗟𝗶𝘀𝘁\n𝗧𝗵𝗲 𝗧𝗼𝘁𝗮𝗹 𝗖𝗼𝗺𝗺𝗮𝗻𝗱𝘀: ${totalCommands}\n\n${commands.map((cmd, index) => `${index + 1}. ${cmd.title} - ${cmd.description}`).join('\n\n')}`;
+
+      return sendMessage(senderId, {
+        text: helpTextMessage
+      }, pageAccessToken);
+    }
+
+    const startIndex = (page - 1) * commandsPerPage;
+    const endIndex = startIndex + commandsPerPage;
+    const commandsForPage = commands.slice(startIndex, endIndex);
+
+    if (commandsForPage.length === 0) {
+      return sendMessage(senderId, { text: `Invalid page number. There are only ${totalPages} pages.` }, pageAccessToken);
+    }
+
+    const helpTextMessage = `𝗖𝗼𝗺𝗺𝗮𝗻𝗱 𝗟𝗶𝘀𝘁 [ 𝗣𝗮𝗴𝗲 ${page} 𝗼𝗳 ${totalPages} ]:\n𝗧𝗵𝗲 𝗧𝗼𝘁𝗮𝗹 𝗖𝗼𝗺𝗺𝗮𝗻𝗱𝘀: ${totalCommands}\n\n${commandsForPage.map((cmd, index) => `${startIndex + index + 1}. ${cmd.title} - ${cmd.description}`).join('\n\n')}\n\n𝗧𝘆𝗽𝗲 "𝗵𝗲𝗹𝗽 [𝗽𝗮𝗴𝗲 𝗻𝘂𝗺𝗯𝗲𝗿] " 𝘁𝗼 𝘀𝗲𝗲 𝗮𝗻𝗼𝘁𝗵𝗲𝗿 𝗽𝗮𝗴𝗲 𝗰𝗼𝗺𝗺𝗮𝗻𝗱𝘀 𝗮𝘃𝗮𝗶𝗹𝗮𝗯𝗹𝗲..`;
+
+    const quickRepliesPage = commandsForPage.map((cmd) => ({
+      content_type: "text",
+      title: cmd.title,
+      payload: cmd.payload
+    }));
+
+    sendMessage(senderId, {
+      text: helpTextMessage,
+      quick_replies: quickRepliesPage
+    }, pageAccessToken);
   }
 };
