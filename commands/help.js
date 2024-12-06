@@ -4,7 +4,7 @@ const { sendMessage } = require('../handles/sendMessage');
 
 module.exports = {
   name: 'help',
-  description: 'Show available commands',
+  description: 'show available commands',
   author: 'developer',
   execute(senderId, args, pageAccessToken) {
     const commandsDir = path.join(__dirname, '../commands');
