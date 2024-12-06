@@ -40,17 +40,7 @@ const handleChatResponse = async (senderId, input, pageAccessToken) => {
 
     const responseTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Manila', hour12: true });
 
-    const answeringMessage = `🕗 Answering your question...`;
-    const formattedAnsweringMessage = useFontFormatting ? formatResponse(answeringMessage) : answeringMessage;
-    await sendMessage(senderId, { text: formattedAnsweringMessage }, pageAccessToken);
-
-    const defaultMessage = `Free GPT / OpenAI
-━━━━━━━━━━━━━━━━
-❓Question: ${input}
-━━━━━━━━━━━━━━━━ 
-✅ Answer: ${response}
-━━━━━━━━━━━━━━━━ 
-⏰ Response: ${responseTime}`;
+    const defaultMessage = `${response}`;
 
     const formattedMessage = useFontFormatting ? formatResponse(defaultMessage) : defaultMessage;
 
