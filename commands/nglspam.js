@@ -2,8 +2,8 @@ const axios = require('axios');
 
 module.exports = {
   name: 'nglspam',
-  description: 'Sends a specified message multiple times to a given username using NGL API.',
-  author: 'tukmol',
+  description: 'nglspam <usn> <mess> <amount>.',
+  author: 'developer',
   async execute(senderId, args, pageAccessToken, sendMessage) {
     const username = args[0];
     const amount = parseInt(args[args.length - 1], 10);
@@ -17,7 +17,7 @@ module.exports = {
 
     for (let i = 0; i < amount; i++) {
       try {
-        const response = await axios.get('https://nash-rest-api-production.up.railway.app/ngl', {
+        const response = await axios.get('https://rest-api.joshuaapostol.site/ngl-spam', {
           params: {
             username,
             message,
