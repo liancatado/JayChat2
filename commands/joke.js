@@ -2,8 +2,8 @@ const axios = require('axios');
 
 module.exports = {
   name: 'joke',
-  description: 'Fetches a random joke.',
-  author: 'chan',  // Change credit if crush moko
+  description: 'fetchna random joke.',
+  author: 'Joker',  // Change credit if crush moko
   async execute(senderId, args, pageAccessToken, sendMessage) {
     sendMessage(senderId, { text: "⚙️ Fetching a joke for you..." }, pageAccessToken);
 
