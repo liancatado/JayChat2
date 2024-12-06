@@ -97,4 +97,5 @@ Before starting, ensure you have a Facebook Page. If you don't have one, create 
   **Note!**
    - You are free to modify this file. You can do whatever you want.
 
+// Modified by: MP5K
 </html>
