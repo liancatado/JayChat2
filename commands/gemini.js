@@ -7,7 +7,7 @@ const token = fs.readFileSync('token.txt', 'utf8');
 const useFontFormatting = false;
 
 module.exports = {
-  name: 'ai',
+  name: 'gemini',
   description: 'free gpt.',
   author: 'Open Ai', // API by Kenlie Navacilla Jugarap
 
