@@ -115,7 +115,7 @@ if (messageText.startsWith('gemini')) {
       return;
     }
 
-    const aiCommand = commands.get('ai');
+    const aiCommand = commands.get('gemini');
     if (aiCommand) {
       try {
         await aiCommand.execute(senderId, [messageText], pageAccessToken);
