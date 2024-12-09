@@ -4,11 +4,11 @@ const fs = require('fs');
 const token = fs.readFileSync('token.txt', 'utf8');
 
 // [ true if turn on font & false if turn off ]
-const useFontFormatting = false;
+const useFontFormatting = true;
 
 module.exports = {
   name: 'ai',
-  description: 'free gpt.',
+  description: 'JayChat.',
   author: 'Open Ai', // API by Kenlie Navacilla Jugarap
 
   async execute(senderId, args) {
@@ -22,7 +22,7 @@ module.exports = {
     }
 
     if (query === "sino creator mo?" || query === "who created you?") {
-      const jokeMessage = "Mark Zuckerberg";
+      const jokeMessage = "Jay Ar";
       const formattedMessage = useFontFormatting ? formatResponse(jokeMessage) : jokeMessage;
       return await sendMessage(senderId, { text: formattedMessage }, pageAccessToken);
     }
@@ -32,7 +32,7 @@ module.exports = {
 };
 
 const handleChatResponse = async (senderId, input, pageAccessToken) => {
-  const apiUrl = "https://api.kenliejugarap.com/freegpt-openai/?";
+  const apiUrl = "https://api.joshweb.click/api/gpt-4o?";
 
   try {
     const { data } = await axios.get(apiUrl, { params: { question: input } });
