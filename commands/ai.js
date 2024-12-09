@@ -32,7 +32,7 @@ module.exports = {
 };
 
 const handleChatResponse = async (senderId, input, pageAccessToken) => {
-  const apiUrl = "https://api.joshweb.click/api/gpt-4o?";
+  const apiUrl = "https://api.kenliejugarap.com/freegpt-openai/?";
 
   try {
     const { data } = await axios.get(apiUrl, { params: { question: input } });
